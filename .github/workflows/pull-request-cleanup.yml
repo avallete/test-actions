@@ -24,6 +24,9 @@ jobs:
           run: |
             echo "reset_database"
             echo $(printenv)
+        - name: Dump GitHub context
+          env:
+            GITHUB_CONTEXT: ${{ toJSON(github) }}
 
   clean_reset_label:
     if: always()
