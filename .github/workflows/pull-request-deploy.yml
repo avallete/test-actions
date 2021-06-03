@@ -27,5 +27,6 @@ jobs:
           echo $(printenv)
 
       - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: |
+          echo "Dump github context"
+          echo ${{ toJSON(github) }}
