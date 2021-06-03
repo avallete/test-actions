@@ -27,7 +27,7 @@ jobs:
         - name: Dump GitHub context
           run: |
             echo "Dump github context"
-            echo ${{ toJSON(github) }}
+            echo "${{ toJSON(github) }}"
 
   clean_reset_label:
     if: always()
