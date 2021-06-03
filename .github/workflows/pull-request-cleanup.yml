@@ -1,0 +1,36 @@
+name: "Reset Database"
+
+on:
+  pull_request:
+    types: [labeled]
+  workflow_run:
+    workflows: ["Pull Request Deploy"]
+    types:
+      - completed
+
+jobs:
+  reset_database:
+    if: |
+      (
+        contains(github.event.pull_request.labels.*.name, 'deploy/skipResetDB') == false &&
+        (
+          (github.event.action == 'labeled' && github.event.label.name == 'deploy/resetDB') ||
+          (github.event.workflow_run.conclusion == 'success')
+        )
+      )
+    runs-on: ubuntu-latest
+    steps:
+        - name: show environment variables
+          run: |
+            echo "reset_database"
+            echo $(printenv)
+
+  clean_reset_label:
+    if: always()
+    needs: reset_database
+    runs-on: ubuntu-latest
+    steps:
+        - name: show environment variables
+          run: |
+            echo "clean_reset_label"
+            echo $(printenv)
