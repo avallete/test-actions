@@ -22,4 +22,6 @@ jobs:
 
       - name: show environment variables
         run: |
+          echo "show variables envs"
           echo $(printenv)
+          echo "TOTO_VARIABLE=MY_TOTO_VARIABLE" >> $GITHUB_ENV
