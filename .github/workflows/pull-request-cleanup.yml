@@ -11,10 +11,12 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
-        - name: show environment variables
-          run: |
-            echo "reset_database"
-            echo $(printenv)
-        - name: Dump GitHub context
-          env:
-            GITHUB_CONTEXT: ${{ toJSON(github) }}
+      - name: show environment variables
+        run: |
+          echo "reset_database"
+          echo $(printenv)
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: |
+          echo '${{ env.GITHUB_CONTEXT }}'
