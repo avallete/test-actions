@@ -1,0 +1,16 @@
+name: "Release Production"
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  release:
+    name: "Release to production"
+    runs-on: "ubuntu-latest"
+    concurrency: release-production
+
+    steps:
+      - name: Create preview env file
+        run: |
+          echo "release to production"
