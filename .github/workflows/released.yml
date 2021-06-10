@@ -11,6 +11,8 @@ jobs:
     concurrency: release-production
 
     steps:
+      - uses: actions/checkout@v2
+
       - name: Create preview env file
         run: |
           echo "release to production"
