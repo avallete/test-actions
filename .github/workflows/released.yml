@@ -14,3 +14,6 @@ jobs:
       - name: Create preview env file
         run: |
           echo "release to production"
+    
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
