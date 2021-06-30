@@ -1,14 +1,14 @@
-name: "Pull Request Deploy"
+name: "Pull Request Change"
 
 on:
   pull_request:
-    types: [labeled, opened, synchronize]
+    types: [synchronize, reopened]
+    branches:
+      - main
 
 jobs:
   deploy:
-    if: |
-      (github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
-      (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy'))
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - name: inject slug/short variables
@@ -16,6 +16,7 @@ jobs:
 
       - name: set STAGE variables in environment for next steps
         run: |
+          echo "PR_ID=${{ github.event.id }}"
           echo "STAGE_ID=pr-${{ github.event.number }}" >> $GITHUB_ENV
           echo "STAGE_NAME=${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
           echo "STAGE_ENV=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
@@ -31,3 +32,14 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: |
           echo '${{ env.GITHUB_CONTEXT }}'
+
+      - uses: octokit/graphql-action@v2.x
+        id: get_pr_id
+        with:
+          query: |
+            query MyQuery {
+            repository(name: "clovis-app", owner: "Clovis-Team") {
+              pullRequest(number: ${{github.event.number}}) {
+                id
+              }
+            }
