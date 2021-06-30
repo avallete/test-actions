@@ -34,12 +34,11 @@ jobs:
           echo '${{ env.GITHUB_CONTEXT }}'
 
       - uses: octokit/graphql-action@v2.x
-        id: get_pr_id
+        id: convert_pr_to_daft
         with:
           query: |
-            query MyQuery {
-            repository(name: "clovis-app", owner: "Clovis-Team") {
-              pullRequest(number: ${{github.event.number}}) {
-                id
+            mutation ConvertToDraft {
+              convertPullRequestToDraft(input: {clientMutationId: "github-action", pullRequestId: "${{ github.event.pull_request.node_id }}"}) {
+                __typename
               }
             }
