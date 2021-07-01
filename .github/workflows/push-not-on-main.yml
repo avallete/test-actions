@@ -1,0 +1,34 @@
+name: "Push occurred"
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: set STAGE variables in environment for next steps
+        run: |
+          echo "PR_ID=${{ github.event.id }}"
+          echo "STAGE_ID=pr-${{ github.event.number }}" >> $GITHUB_ENV
+          echo "STAGE_NAME=${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
+          echo "STAGE_ENV=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
+
+      - name: show environment variables
+        run: |
+          echo "TOTO_VARIABLE=MY_TOTO_VARIABLE" >> $GITHUB_ENV
+          echo "show variables envs"
+          echo $(printenv)
+
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: |
+          echo '${{ env.GITHUB_CONTEXT }}'
+
+      - uses:  Clovis-team/pass-branch-pr-to-draft
