@@ -1,9 +1,8 @@
 name: "Pull Request Change"
 
 on:
-  push:
   pull_request:
-    types: [synchronize, reopened]
+    types: [synchronize, reopened, edited]
     branches:
       - main
 
