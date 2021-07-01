@@ -31,4 +31,4 @@ jobs:
         run: |
           echo '${{ env.GITHUB_CONTEXT }}'
 
-      - uses:  Clovis-team/pass-branch-pr-to-draft
+      - uses: Clovis-team/pass-branch-pr-to-draft
